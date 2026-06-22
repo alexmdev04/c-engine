@@ -74,7 +74,7 @@ fi
 
 TIME_START=$(date +%s%3N)
 
-clang $FLAGS main.c -o build/$NAME
+clang $FLAGS src/main.c -o build/$NAME
 
 if [ $? -ne 0 ]; then
     echo "Build failed."
