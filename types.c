@@ -21,16 +21,6 @@ typedef float f32;
 typedef double f64;
 
 typedef struct {
-    f32 x;
-    f32 y;
-} vec2f;
-
-typedef struct {
-    i32 x;
-    i32 y;
-} vec2;
-
-typedef struct {
     const char* data;
     i32 length;
 } string;

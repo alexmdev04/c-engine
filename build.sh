@@ -2,16 +2,21 @@
 
 NAME="engine"
 LIBS="vulkan SDL3"
+
 RUN_IMMEDIATELY=true
 ECHO_FLAGS=false
 DEBUG_MODE=false
-DEFAULT_FLAGS="-std=gnu23 -Wall -Wextra -pedantic -Werror=return-type"
+
+DEFAULT_FLAGS="-xc -std=gnu23 -Wall -Wextra -pedantic -Werror=return-type -Iinclude -Iinclude/external"
 DEBUG_FLAGS="-O0 -g -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fstack-protector-strong"
 # DEBUG_FLAGS="-O0 -g -fsanitize=undefined -fno-omit-frame-pointer -fstack-protector-strong"
 RELEASE_FLAGS="-O2 -DNDEBUG -fPIE -pie"
+
 COLOR_GREEN="\e[38;5;154m"
 COLOR_YELLOW="\e[38;5;229m"
 COLOR_RESET="\e[0m"
+
+sed -i "2s|.*|    Add: [$(echo $DEFAULT_FLAGS | sed "s| |, |g")]|" .clangd
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
