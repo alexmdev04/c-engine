@@ -1,0 +1,16 @@
+{
+    // "enabledExtensions": [
+    //     "llvm-vs-code-extensions.vscode-clangd",
+    //     "discretegames.f5anything"
+    // ],
+    // "disabledExtensions": [
+    //     "ms-vscode.cpptools-extension-pack",
+    //     "ms-vscode.cpptools",
+    //     "ms-vscode.cpp-devtools",
+    //     "ms-vscode.cmake-tools"
+    // ],
+    "recommendations": [
+        "llvm-vs-code-extensions.vscode-clangd",
+        "discretegames.f5anything"
+    ]
+}
