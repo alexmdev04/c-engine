@@ -1,0 +1,13 @@
+IndentWidth: 4
+PointerAlignment: Left
+QualifierAlignment: Leave
+ReferenceAlignment: Pointer
+IndentCaseLabels: true
+ColumnLimit: 80
+AllowShortFunctionsOnASingleLine: false
+SpaceInEmptyBraces: Always
+Cpp11BracedListStyle: Block
+AllowAllArgumentsOnNextLine: true
+AlignAfterOpenBracket: BlockIndent
+BreakAfterOpenBracketBracedList: true
+BinPackArguments: false

@@ -1,0 +1,9 @@
+Completion:
+    MacroFilter: FuzzyMatch
+CompileFlags:
+    Add: [-xc, -std=gnu23, -Wall, -Wextra, -Werror=return-type]
+    Compiler: clang
+Diagnostics:
+    UnusedIncludes: None
+    MissingIncludes: None
+IncludeRules: Disabled
