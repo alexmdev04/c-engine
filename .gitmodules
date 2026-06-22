@@ -1,0 +1,6 @@
+[submodule "include/external/cml"]
+	path = include/external/cml
+	url = https://github.com/pbotmeyertron/c_math_library.git
+[submodule "include/external/simde"]
+	path = include/external/simde
+	url = https://github.com/simd-everywhere/simde.git
