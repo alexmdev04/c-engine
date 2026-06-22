@@ -1,6 +1,8 @@
 [submodule "include/external/cml"]
 	path = include/external/cml
 	url = https://github.com/pbotmeyertron/c_math_library.git
+	branch = 905d96267678f6a3598b27fe71abd7b743931b81
 [submodule "include/external/simde"]
 	path = include/external/simde
 	url = https://github.com/simd-everywhere/simde.git
+	branch = 71fd833d9666141edcd1d3c109a80e228303d8d7
