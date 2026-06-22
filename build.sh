@@ -74,14 +74,14 @@ fi
 
 TIME_START=$(date +%s%3N)
 
-clang $FLAGS main.c -o $NAME
+clang $FLAGS main.c -o build/$NAME
 
 if [ $? -ne 0 ]; then
     echo "Build failed."
     exit 1
 fi
 
-chmod +x "$NAME"
+chmod +x build/$NAME
 
 TIME_END=$(date +%s%3N)
 
@@ -99,6 +99,6 @@ echo -e "Running $NAME...\n"
 #     "./$NAME"
 # fi
 
-"./$NAME"
+build/$NAME
 
 echo -e "\nExited $NAME with code: $?"
