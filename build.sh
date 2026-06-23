@@ -23,20 +23,24 @@ COLOR_GREEN="\e[38;5;154m"
 COLOR_YELLOW="\e[38;5;229m"
 COLOR_RESET="\e[0m"
 
+# Auto replace .clangd config file flags so they're are up to date
 sed -i "2s|.*|    Add: [$(echo $DEFAULT_FLAGS | sed "s| |, |g")]|" .clangd
 
+# Detect the current OS
 unameOut="$(uname -s)"
-case "${unameOut}" in
+case "$unameOut" in
     Linux*)     HOST_OS=LINUX;;
     Darwin*)    HOST_OS=MAC;;
     CYGWIN*)    HOST_OS=WINDOWS;;
     MINGW*)     HOST_OS=WINDOWS;;
     MSYS*)      HOST_OS=WINDOWS;;
-    *)          HOST_OS="UNKNOWN:${unameOut}"
+    *)          HOST_OS="UNKNOWN:$unameOut"
 esac
 
+# Set default build target OS to the current OS 
 TARGET_OS=$HOST_OS
 
+# Handle command line options
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --debug)
@@ -90,7 +94,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-
+# Get debug mode and platform specific compilation flags, and print the current target (e.g. Debug Linux)
 if [ $DEBUG_MODE = true ]; then
     echo -e "Building $NAME in \e[38;5;197mDEBUG\e[0m mode for $TARGET_OS..."
     if [ $TARGET_OS=="WINDOWS" ]; then
@@ -107,45 +111,59 @@ else
     fi
 fi
 
+# Add libraries to compilation flags
 FLAGS="$FLAGS$(echo " $LIBS" | sed 's/ / -l/g')"
 
+# If requested, print the compilation flags
 if [ $ECHO_FLAGS = true ]; then
     echo "Compiler flags: $FLAGS"
 fi
 
-TIME_START=$(date +%s%3N)
-
+# If on windows, append .exe to the executable name
 if [ $TARGET_OS=="WINDOWS" ]; then
     NAME="$NAME".exe
 fi
 
+# Start compilation timer
+TIME_START=$(date +%s%3N)
+
+# Start compilation
 clang $FLAGS src/main.c -o build/$NAME
 
+# If compilation failed, print and exit
 if [ $? -ne 0 ]; then
     echo "Build failed."
     exit 1
 fi
 
+# If on non-windows then mark the executable as executable
 if [ $TARGET_OS!="WINDOWS" ]; then
     chmod +x build/$NAME
 fi
 
+# Stop compilation timer
 TIME_END=$(date +%s%3N)
 
+# Print success and the compilation time
 echo -e "Build successful (\e[38;5;154m$((TIME_END - TIME_START))ms\e[0m)."
 
+# If not requested to run the executable then exit
 if [ $RUN_IMMEDIATELY = false ]; then
     exit 0
 fi
 
+# Print that executable is running
 echo -e "Running $NAME...\n"
 
+# Start debugging
 # if [ $DEBUG_MODE = true ]; then
 #     valgrind --suppressions=nvidia1.supp --suppressions=nvidia2.supp --leak-check=full --show-reachable=yes --quiet "./$NAME"
 # else
 #     "./$NAME"
 # fi
 
+# Start executable
 build/$NAME
 
+# Print executable exit code
 echo -e "\nExited $NAME with code: $?"
