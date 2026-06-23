@@ -1,5 +1,5 @@
 CompileFlags:
-    Add: [-xc, -std=gnu23, -Wall, -Wextra, -pedantic, -Werror=return-type, -Iinclude, -Iinclude/external]
+    Add: [-xc, -std=gnu23, -Wall, -Wextra, -pedantic, -Werror=return-type, -Iinclude, -Iinclude/external, -Iinclude/external/cglm/include]
     Compiler: clang
 Completion:
     MacroFilter: FuzzyMatch

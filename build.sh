@@ -7,7 +7,7 @@ RUN_IMMEDIATELY=true
 ECHO_FLAGS=false
 DEBUG_MODE=false
 
-DEFAULT_FLAGS="-xc -std=gnu23 -Wall -Wextra -pedantic -Werror=return-type -Iinclude -Iinclude/external"
+DEFAULT_FLAGS="-xc -std=gnu23 -Wall -Wextra -pedantic -Werror=return-type -Iinclude -Iinclude/external -Iinclude/external/cglm/include"
 DEBUG_FLAGS="-O0 -g -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fstack-protector-strong"
 # DEBUG_FLAGS="-O0 -g -fsanitize=undefined -fno-omit-frame-pointer -fstack-protector-strong"
 RELEASE_FLAGS="-O2 -DNDEBUG -fPIE -pie"
