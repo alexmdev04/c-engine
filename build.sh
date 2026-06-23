@@ -95,7 +95,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Get debug mode and platform specific compilation flags, and print the current target (e.g. Debug Linux)
-if [ $DEBUG_MODE = true ]; then
+if [[ $DEBUG_MODE == true ]]; then
     echo -e "Building $NAME in \e[38;5;197mDEBUG\e[0m mode for $TARGET_OS..."
     if [ $TARGET_OS=="WINDOWS" ]; then
         FLAGS="$FLAGS $WINDOWS_DEBUG_FLAGS"
@@ -115,12 +115,12 @@ fi
 FLAGS="$FLAGS$(echo " $LIBS" | sed 's/ / -l/g')"
 
 # If requested, print the compilation flags
-if [ $ECHO_FLAGS = true ]; then
+if [[ $ECHO_FLAGS == true ]]; then
     echo "Compiler flags: $FLAGS"
 fi
 
 # If on windows, append .exe to the executable name
-if [ $TARGET_OS=="WINDOWS" ]; then
+if [[ $TARGET_OS == "WINDOWS" ]]; then
     NAME="$NAME".exe
 fi
 
@@ -131,13 +131,13 @@ TIME_START=$(date +%s%3N)
 clang $FLAGS src/main.c -o build/$NAME
 
 # If compilation failed, print and exit
-if [ $? -ne 0 ]; then
+if [[ $? -ne 0 ]]; then
     echo "Build failed."
     exit 1
 fi
 
 # If on non-windows then mark the executable as executable
-if [ $TARGET_OS!="WINDOWS" ]; then
+if [[ $TARGET_OS != "WINDOWS" ]]; then
     chmod +x build/$NAME
 fi
 
@@ -148,7 +148,7 @@ TIME_END=$(date +%s%3N)
 echo -e "Build successful (\e[38;5;154m$((TIME_END - TIME_START))ms\e[0m)."
 
 # If not requested to run the executable then exit
-if [ $RUN_IMMEDIATELY = false ]; then
+if [[ $RUN_IMMEDIATELY == false ]]; then
     exit 0
 fi
 
