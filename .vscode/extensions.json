@@ -1,7 +1,8 @@
 {
     // "enabledExtensions": [
     //     "llvm-vs-code-extensions.vscode-clangd",
-    //     "discretegames.f5anything"
+    //     "discretegames.f5anything",
+    //     "xaver.clang-format"
     // ],
     // "disabledExtensions": [
     //     "ms-vscode.cpptools-extension-pack",
@@ -11,6 +12,7 @@
     // ],
     "recommendations": [
         "llvm-vs-code-extensions.vscode-clangd",
-        "discretegames.f5anything"
+        "discretegames.f5anything",
+        "xaver.clang-format"
     ]
 }
