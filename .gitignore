@@ -1,1 +1,4 @@
 build/
+tmp/
+include/external/SDL3
+include/external/vulkan
