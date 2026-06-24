@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 
 NAME="engine"
-LIBS="vulkan SDL3"
+LIBS="vulkan m"
+ARCHIVES="SDL3"
 
 RUN_IMMEDIATELY=true
 ECHO_FLAGS=false
 DEBUG_MODE=false
 
-INCLUDE_DIRS="-Iinclude/external/cglm/include"
-DEFAULT_FLAGS="-xc -std=gnu23 -Wall -Wextra -pedantic -Werror=return-type -Iinclude -Iinclude/external $INCLUDE_DIRS"
+INCLUDE_DIRS="-Iinclude/SDL3 -Iinclude/external/cglm/include"
+DEFAULT_FLAGS="-xc -std=gnu23 -Wall -Wextra -pedantic -Werror=return-type -Iinclude $INCLUDE_DIRS"
+# DEFAULT_FLAGS="-xc -std=gnu23 -Wall -Wextra -pedantic -Werror=return-type -Iinclude -Iinclude/external -Llib -lSDL3 -Wl,-rpath,lib $INCLUDE_DIRS"
 
 DEBUG_FLAGS="-O0 -g -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fstack-protector-strong"
 LINUX_DEBUG_FLAGS="-fPIE -pie"
@@ -111,9 +113,6 @@ else
     fi
 fi
 
-# Add libraries to compilation flags
-FLAGS="$FLAGS$(echo " $LIBS" | sed 's/ / -l/g')"
-
 # If requested, print the compilation flags
 if [[ $ECHO_FLAGS == true ]]; then
     echo "Compiler flags: $FLAGS"
@@ -128,11 +127,32 @@ fi
 TIME_START=$(date +%s%3N)
 
 # Start compilation
-clang $FLAGS src/main.c -o build/$NAME
+clang -c $FLAGS src/main.c -o build/$NAME.o
 
 # If compilation failed, print and exit
 if [[ $? -ne 0 ]]; then
-    echo "Build failed."
+    echo "Build failed (compilation)."
+    exit 1
+fi
+
+# Transform archives into clang input files
+read -ra arr <<<" $ARCHIVES"
+for a in "${arr[@]}"; 
+    do ARCHIVES_AS_FLAGS="$ARCHIVES_AS_FLAGS lib/lib$a.a";
+done
+
+# Transform libraries into clang flags
+LIBS_AS_FLAGS=$(echo " $LIBS" | sed 's/ / -l/g')
+
+# Link archives and libraries
+clang build/"$NAME.o" $ARCHIVES_AS_FLAGS -o build/"$NAME" $LIBS_AS_FLAGS
+
+# Stop compilation timer
+TIME_END=$(date +%s%3N)
+
+# If compilation failed, print and exit
+if [[ $? -ne 0 ]]; then
+    echo "Build failed (linking)."
     exit 1
 fi
 
@@ -140,9 +160,6 @@ fi
 if [[ $TARGET_OS != "WINDOWS" ]]; then
     chmod +x build/$NAME
 fi
-
-# Stop compilation timer
-TIME_END=$(date +%s%3N)
 
 # Print success and the compilation time
 echo -e "Build successful (\e[38;5;154m$((TIME_END - TIME_START))ms\e[0m)."
