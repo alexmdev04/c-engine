@@ -6,6 +6,7 @@
 #pragma clang diagnostic ignored "-Wstatic-in-inline"
 #include "SDL3/SDL.h"
 #include "cglm/cglm.h"
+#include "vulkan/vulkan.h"
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
