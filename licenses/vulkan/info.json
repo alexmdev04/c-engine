@@ -1,0 +1,6 @@
+{
+    "name": "vulkan",
+    "version": "v1.4.355",
+    "commit": "6433e5c70bb9ec995f72d767934acaff8ef11ae3",
+    "source": "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.4.355.zip"
+}

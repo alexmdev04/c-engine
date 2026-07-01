@@ -1,0 +1,6 @@
+{
+    "name": "SDL3",
+    "version": "3.4.10",
+    "commit": "8e37db5e797b6167f3a00d697d816a684bd259c7",
+    "source": "https://github.com/libsdl-org/SDL/releases/download/release-3.4.10/SDL3-3.4.10.zip"
+}
