@@ -1,47 +1,4 @@
-#define MAIN
-#include "external.h"
-#include "types.c"
-
-const i32 X_WINDOW_WIDTH = 960;
-const i32 X_WINDOW_HEIGHT = 540;
-
-SDL_Window* MainWindow = { };
-SDL_Surface* MainSurface = { };
-SDL_Surface* HelloSurface = { };
-
-void X_Init(void) {
-    SDL_LogVerbose(0, "Initializing...\n");
-
-    bool initSuccess = SDL_Init(SDL_INIT_VIDEO);
-
-    if (!initSuccess) {
-        SDL_Log("Initialization failed: %s \n", SDL_GetError());
-        abort();
-    }
-}
-
-void X_Stop() {
-    SDL_Log("Stopping...\n");
-
-    if (MainWindow) {
-        SDL_DestroyWindow(MainWindow);
-        MainWindow = nullptr;
-        MainSurface = nullptr;
-    }
-
-    if (HelloSurface) {
-        SDL_DestroySurface(HelloSurface);
-        HelloSurface = nullptr;
-    }
-
-    SDL_Quit();
-}
-
-void X_SafeAbort() {
-    SDL_Log("Safely aborting...\n");
-    X_Stop();
-    abort();
-}
+#include "src.c"
 
 void X_CreateWindow(SDL_Window** window, SDL_Surface** surface) {
     SDL_LogVerbose(0, "Creating window...\n");
@@ -67,7 +24,7 @@ void X_CreateWindow(SDL_Window** window, SDL_Surface** surface) {
     *surface = newSurface;
 }
 
-bool X_SDLPoll() {
+bool X_SDLPoll(void) {
     SDL_Event event = { };
 
     while (SDL_PollEvent(&event)) {
@@ -83,29 +40,29 @@ bool X_SDLPoll() {
     return true;
 }
 
-void X_PreloadAssets() {
+void X_PreloadAssets(void) {
     const char* imagePath = "hello.bmp";
-    HelloSurface = SDL_LoadBMP(imagePath);
-    if (!HelloSurface) {
+    X_HelloSurface = SDL_LoadBMP(imagePath);
+    if (!X_HelloSurface) {
         SDL_Log("Unable to load image %s: %s", imagePath, SDL_GetError());
         X_SafeAbort();
     }
 }
 
-bool X_RenderLoop() {
+bool X_RenderLoop(void) {
     SDL_FillSurfaceRect(
-        MainSurface, nullptr, SDL_MapSurfaceRGB(MainSurface, 0x7f, 0x00, 0xff)
+        X_MainSurface, nullptr, SDL_MapSurfaceRGB(X_MainSurface, 0x7f, 0x00, 0xff)
     );
 
     SDL_BlitSurfaceScaled(
-        HelloSurface, nullptr, MainSurface, nullptr, SDL_SCALEMODE_NEAREST
+        X_HelloSurface, nullptr, X_MainSurface, nullptr, SDL_SCALEMODE_NEAREST
     );
 
-    SDL_UpdateWindowSurface(MainWindow);
+    SDL_UpdateWindowSurface(X_MainWindow);
     return true;
 }
 
-void X_Loop() {
+void X_Loop(void) {
     bool quit = false;
     while (!quit) {
         if (!X_SDLPoll()) {
@@ -116,12 +73,26 @@ void X_Loop() {
     }
 }
 
+void X_Init(void) {
+    SDL_LogVerbose(0, "Initializing...\n");
+
+    bool initSuccess = SDL_Init(SDL_INIT_VIDEO);
+
+    if (!initSuccess) {
+        SDL_Log("Initialization failed: %s \n", SDL_GetError());
+        abort();
+    }
+
+    X_CreateWindow(&X_MainWindow, &X_MainSurface);
+    X_PreloadAssets();
+
+    X_Vk_Init();
+}
+
 int main(void) {
     printf("Here we go!\n");
     X_Init();
-    X_CreateWindow(&MainWindow, &MainSurface);
     SDL_LogVerbose(0, "Starting main loop...\n");
-    X_PreloadAssets();
     X_Loop();
     X_Stop();
     return 0;

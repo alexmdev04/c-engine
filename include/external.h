@@ -1,6 +1,4 @@
-#ifndef EXTERNAL_H
-#define EXTERNAL_H
-
+#pragma once
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-function"
 #pragma clang diagnostic ignored "-Wstatic-in-inline"
@@ -12,7 +10,4 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #pragma clang diagnostic pop
-
-#endif

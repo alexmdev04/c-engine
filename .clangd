@@ -6,3 +6,4 @@ Completion:
 Diagnostics:
     UnusedIncludes: None
     MissingIncludes: None
+    Suppress: 'pp_including_mainfile_in_preamble'

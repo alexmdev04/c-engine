@@ -1,6 +1,4 @@
-#ifndef MAIN
-#include "external.h"
-#endif
+#include "src.c"
 
 typedef int8_t i8;
 typedef int16_t i16;

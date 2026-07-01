@@ -126,7 +126,7 @@ fi
 TIME_START=$(date +%s%3N)
 
 # Start compilation
-clang -c $FLAGS src/main.c -o build/$NAME.o
+clang -c $FLAGS src/src.c -o build/$NAME.o
 
 # If compilation failed, print and exit
 if [[ $? -ne 0 ]]; then
