@@ -8,9 +8,8 @@ RUN_IMMEDIATELY=true
 ECHO_FLAGS=false
 DEBUG_MODE=false
 
-INCLUDE_DIRS="-Iinclude/SDL3 -Iinclude/external/cglm/include"
-DEFAULT_FLAGS="-xc -std=gnu23 -Wall -Wextra -pedantic -Werror=return-type -Iinclude $INCLUDE_DIRS"
-# DEFAULT_FLAGS="-xc -std=gnu23 -Wall -Wextra -pedantic -Werror=return-type -Iinclude -Iinclude/external -Llib -lSDL3 -Wl,-rpath,lib $INCLUDE_DIRS"
+DEFAULT_FLAGS="-xc -std=gnu23 -Wall -Wextra -pedantic -Werror=return-type -Iinclude"
+# DEFAULT_FLAGS="-xc -std=gnu23 -Wall -Wextra -pedantic -Werror=return-type -Iinclude -Llib -lSDL3 -Wl,-rpath,lib"
 
 DEBUG_FLAGS="-O0 -g -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fstack-protector-strong"
 LINUX_DEBUG_FLAGS="-fPIE -pie"

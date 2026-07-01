@@ -1,4 +1,1 @@
-[submodule "include/external/cglm"]
-	path = include/external/cglm
-	url = https://github.com/recp/cglm.git
-	branch = 144d1e7c29b3b0c6dede7917a0476cc95248559c
+
