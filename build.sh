@@ -99,9 +99,9 @@ done
 if [[ $DEBUG_MODE == true ]]; then
     echo -e "Building $NAME in \e[38;5;197mDEBUG\e[0m mode for $TARGET_OS..."
     if [ $TARGET_OS=="WINDOWS" ]; then
-        FLAGS="$FLAGS $WINDOWS_DEBUG_FLAGS"
+        FLAGS="$DEFAULT_FLAGS $WINDOWS_DEBUG_FLAGS"
     else
-        FLAGS="$FLAGS $LINUX_DEBUG_FLAGS"
+        FLAGS="$DEFAULT_FLAGS $LINUX_DEBUG_FLAGS"
     fi
 else
     echo -e "Building $NAME in \e[38;5;154mRELEASE\e[0m mode for $TARGET_OS..."
