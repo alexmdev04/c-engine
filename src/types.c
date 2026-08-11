@@ -20,7 +20,7 @@ typedef double f64;
 
 typedef struct {
     const char* data;
-    i32 length;
+    uptr length;
 } string;
 
 string string_ctor(const char* cstr) {
