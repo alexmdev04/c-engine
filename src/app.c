@@ -76,11 +76,10 @@ bool SX_App_SDLPoll(App* app) {
         }
     }
 
-
     return true;
 }
 
-void SX_App_Loop(App* app) {
+void SX_App_Update(App* app) {
     SDL_LogVerbose(0, "[SX_App] Starting main loop...\n");
 
     while (SX_App_SDLPoll(app)) {
