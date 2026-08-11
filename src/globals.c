@@ -1,33 +1,35 @@
 #include "src.c"
 
-const i32 X_WINDOW_WIDTH = 960;
-const i32 X_WINDOW_HEIGHT = 540;
+const i32 SX_WINDOW_WIDTH = 960;
+const i32 SX_WINDOW_HEIGHT = 540;
 
-SDL_Window* X_MainWindow = { };
-SDL_Surface* X_MainSurface = { };
-SDL_Surface* X_HelloSurface = { };
+bool SX_TryCreateWindow(
+    SDL_Window** window, 
+    SDL_Surface** surface,
+    const char* title,
+    i32 width,
+    i32 height,
+    SDL_WindowFlags flags
+) {
+    SDL_LogVerbose(0, "Creating window...\n");
 
-VkInstance X_Vk_Instance = { };
+    auto newWindow = SDL_CreateWindow(title, width, height, flags);
 
-void X_Stop(void) {
-    SDL_Log("Stopping...\n");
-
-    if (X_MainWindow) {
-        SDL_DestroyWindow(X_MainWindow);
-        X_MainWindow = nullptr;
-        X_MainSurface = nullptr;
+    if (!newWindow) {
+        SDL_Log("Window creation failed: %s\n", SDL_GetError());
+        return false;
     }
 
-    if (X_HelloSurface) {
-        SDL_DestroySurface(X_HelloSurface);
-        X_HelloSurface = nullptr;
+    SDL_LogVerbose(0, "Getting window surface...\n");
+
+    auto newSurface = SDL_GetWindowSurface(newWindow);
+
+    if (!newSurface) {
+        SDL_Log("Surface creation failed: %s\n", SDL_GetError());
+        return false;
     }
 
-    SDL_Quit();
-}
-
-void X_SafeAbort(void) {
-    SDL_Log("Safely aborting...\n");
-    X_Stop();
-    abort();
+    *window = newWindow;
+    *surface = newSurface;
+    return true;
 }

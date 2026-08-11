@@ -1,5 +1,5 @@
 #include "src.c"
 
-void X_Vk_Init(void) {
-    SDL_Log("This is where vulkan will go :)");
+VkInstance SX_Vk_Init(void) {
+    return 0;
 }
