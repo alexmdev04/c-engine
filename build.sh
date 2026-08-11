@@ -122,6 +122,15 @@ if [[ $TARGET_OS == "WINDOWS" ]]; then
     NAME="$NAME".exe
 fi
 
+# Transform archives into clang input files
+read -ra arr <<<" $ARCHIVES"
+for a in "${arr[@]}"; 
+    do ARCHIVES_AS_FLAGS="$ARCHIVES_AS_FLAGS lib/lib$a.a";
+done
+
+# Transform libraries into clang flags
+LIBS_AS_FLAGS=$(echo " $LIBS" | sed 's/ / -l/g')
+
 # Start compilation timer
 TIME_START=$(date +%s%3N)
 
@@ -134,14 +143,6 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
-# Transform archives into clang input files
-read -ra arr <<<" $ARCHIVES"
-for a in "${arr[@]}"; 
-    do ARCHIVES_AS_FLAGS="$ARCHIVES_AS_FLAGS lib/lib$a.a";
-done
-
-# Transform libraries into clang flags
-LIBS_AS_FLAGS=$(echo " $LIBS" | sed 's/ / -l/g')
 
 # Link archives and libraries
 clang build/"$NAME.o" $ARCHIVES_AS_FLAGS -o build/"$NAME" $LIBS_AS_FLAGS
