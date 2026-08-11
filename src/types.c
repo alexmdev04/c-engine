@@ -26,9 +26,3 @@ typedef struct {
 string string_ctor(const char* cstr) {
     return (string){ cstr, strlen(cstr) };
 }
-
-typedef struct {
-    f32 delta;
-    f32 elapsed;
-} Time;
-

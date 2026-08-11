@@ -5,7 +5,7 @@ typedef struct {
     SDL_Surface* mainSurface;
     SDL_Surface* helloSurface;
     VkInstance vkInstance;
-    
+    Time time;
 } App;
 
 void SX_App_Stop(App* app) {
@@ -33,13 +33,13 @@ void SX_App_SafeAbort(App* app) {
 
 void SX_App_CreateWindow(App* app) {
     if (!SX_TryCreateWindow(
-        &app->mainWindow,
-        &app->mainSurface,
-        "swade",
-        SX_WINDOW_WIDTH,
-        SX_WINDOW_HEIGHT,
-        0
-    )) {
+            &app->mainWindow,
+            &app->mainSurface,
+            "swade",
+            SX_WINDOW_WIDTH,
+            SX_WINDOW_HEIGHT,
+            0
+        )) {
         SX_App_SafeAbort(app);
     }
 }
@@ -83,6 +83,9 @@ void SX_App_Update(App* app) {
     SDL_LogVerbose(0, "[SX_App] Starting main loop...\n");
 
     while (SX_App_SDLPoll(app)) {
+        SX_Time_Update(&app->time);
+        SX_Time_PrintFPS(&app->time);
+
         SX_App_RenderLoop(app);
     }
 }
@@ -112,6 +115,8 @@ App SX_App_Init(void) {
     SX_App_Temp_PreloadTestAssets(&app);
 
     app.vkInstance = SX_Vk_Init();
+
+    app.time = SX_Time_Init();
 
     return app;
 }
