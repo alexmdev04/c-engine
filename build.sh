@@ -136,22 +136,23 @@ TIME_START=$(date +%s%3N)
 
 # Start compilation
 clang -c $FLAGS src/src.c -o build/$NAME.o
+COMPILATION_EXIT_CODE=$?
 
 # If compilation failed, print and exit
-if [[ $? -ne 0 ]]; then
+if [[ $COMPILATION_EXIT_CODE -ne 0 ]]; then
     echo "Build failed (compilation)."
     exit 1
 fi
 
-
 # Link archives and libraries
 clang build/"$NAME.o" $ARCHIVES_AS_FLAGS -o build/"$NAME" $LIBS_AS_FLAGS
+LINKING_EXIT_CODE=$?
 
 # Stop compilation timer
 TIME_END=$(date +%s%3N)
 
 # If compilation failed, print and exit
-if [[ $? -ne 0 ]]; then
+if [[ $LINKING_EXIT_CODE -ne 0 ]]; then
     echo "Build failed (linking)."
     exit 1
 fi
