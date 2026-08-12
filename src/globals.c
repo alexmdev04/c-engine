@@ -2,6 +2,8 @@
 
 const i32 SX_WINDOW_WIDTH = 960;
 const i32 SX_WINDOW_HEIGHT = 540;
+#define c_str const char* // immutable value, mutable pointer
+#define c_str_arr const char* const* // immutable values, mutable pointers to values
 
 bool SX_TryCreateWindow(
     SDL_Window** window, 
