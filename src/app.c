@@ -6,6 +6,9 @@ typedef struct {
     u32 windowWidth;
     u32 windowHeight;
 
+    // Vulkan
+    Vk vk;
+
     // Other
     // c_str exeName;
     Time time;
@@ -13,6 +16,8 @@ typedef struct {
 
 void SX_App_Stop(App* app) {
     SDL_Log("Stopping...\n");
+
+    SX_Vk_Stop(&app->vk);
 
     if (app->mainWindow) {
         SDL_DestroyWindow(app->mainWindow);
@@ -41,7 +46,7 @@ void SX_App_CreateWindow(App* app) {
 }
 
 bool SX_App_RenderLoop(App* app) {
-
+    SX_Vk_Render(&app->vk, app->mainWindow);
     return true;
 }
 
@@ -99,6 +104,11 @@ App SX_App_Init(i32 argc, c_str_arr argv) {
     if (strcmp(cwd, basePath) != 0) {
         SX_SetCwd(basePath);
         SX_Log_Now("Set cwd to: %s\n", basePath);
+    }
+
+    if (!SX_Vk_TryInit(&app.vk, app.mainWindow)) {
+        SX_Log_Now("[SK_App] Vulkan initialization failed.\n");
+        abort();
     }
 
     app.time = SX_Time_Init();

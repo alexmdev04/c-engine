@@ -131,6 +131,16 @@ done
 # Transform libraries into clang flags
 LIBS_AS_FLAGS=$(echo " $LIBS" | sed 's/ / -l/g')
 
+# Clear build directory
+mkdir -p build
+touch build/.gitkeep
+mkdir -p build/shaders
+touch build/shaders/.gitkeep
+rm build/$NAME.o
+rm build/vma_volk.o
+rm build/$NAME
+rm -rf build/shaders
+
 # Start compilation timer
 TIME_START=$(date +%s%3N)
 
@@ -166,6 +176,9 @@ if [[ $LINKING_EXIT_CODE -ne 0 ]]; then
     echo "Build failed (linking)."
     exit 1
 fi
+
+# Copy shaders to build directory
+cp -r src/shaders build
 
 # If on non-windows then mark the executable as executable
 if [[ $TARGET_OS != "WINDOWS" ]]; then
