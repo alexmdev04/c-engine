@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 NAME="engine"
-LIBS="vulkan m"
+LIBS="vulkan m shaderc_shared"
 ARCHIVES="SDL3"
 
 RUN_IMMEDIATELY=true
@@ -144,8 +144,18 @@ if [[ $COMPILATION_EXIT_CODE -ne 0 ]]; then
     exit 1
 fi
 
+# Start VMA/Volk compilation
+clang++ -c -std=gnu++23 -Wno-nullability-completeness -Wno-nullability-extension -Iinclude src/vma_volk.cpp -o build/vma_volk.o
+VV_COMPILATION_EXIT_CODE=$?
+
+# If VMA/Volk compilation failed, print and exit
+if [[ $VV_COMPILATION_EXIT_CODE -ne 0 ]]; then
+    echo "Build failed (VMA/Volk compilation)."
+    exit 1
+fi
+
 # Link archives and libraries
-clang build/"$NAME.o" $ARCHIVES_AS_FLAGS -o build/"$NAME" $LIBS_AS_FLAGS
+clang++ build/"$NAME.o" build/vma_volk.o $ARCHIVES_AS_FLAGS -o build/"$NAME" $LIBS_AS_FLAGS -static-libstdc++
 LINKING_EXIT_CODE=$?
 
 # Stop compilation timer

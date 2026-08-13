@@ -13,8 +13,8 @@
 #include "SDL3/SDL.h"
 #include "SDL3/SDL_vulkan.h"
 #include "cglm/cglm.h"
-#define VOLK_IMPLEMENTATION
 #include "volk/volk.h"
 #include "vma/vk_mem_alloc.h"
+#include "shaderc/shaderc.h" // TODO: statically link shaderc
 // #include "vulkan/vulkan.h"
 #pragma clang diagnostic pop
