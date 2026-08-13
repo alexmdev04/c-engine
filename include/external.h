@@ -5,6 +5,11 @@
 #pragma clang diagnostic ignored "-Wunused-variable"
 #pragma clang diagnostic ignored "-Wnullability-extension"
 #pragma clang diagnostic ignored "-Wstatic-in-inline"
+#ifdef _WIN32
+    #include <direct.h>
+#else
+    #include <unistd.h>
+#endif
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>

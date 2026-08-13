@@ -1,10 +1,13 @@
 #include "src.c"
 
 typedef struct {
+    // SDL
     SDL_Window* mainWindow;
-    SDL_Surface* mainSurface;
-    SDL_Surface* helloSurface;
-    VkInstance vkInstance;
+    u32 windowWidth;
+    u32 windowHeight;
+
+    // Other
+    // c_str exeName;
     Time time;
 } App;
 
@@ -14,12 +17,6 @@ void SX_App_Stop(App* app) {
     if (app->mainWindow) {
         SDL_DestroyWindow(app->mainWindow);
         app->mainWindow = nullptr;
-        app->mainSurface = nullptr;
-    }
-
-    if (app->helloSurface) {
-        SDL_DestroySurface(app->helloSurface);
-        app->helloSurface = nullptr;
     }
 
     SDL_Quit();
@@ -33,33 +30,18 @@ void SX_App_SafeAbort(App* app) {
 
 void SX_App_CreateWindow(App* app) {
     if (!SX_TryCreateWindow(
-            &app->mainWindow,
-            &app->mainSurface,
-            "swade",
-            SX_WINDOW_WIDTH,
-            SX_WINDOW_HEIGHT,
-            0
-        )) {
+        &app->mainWindow,
+        "swade",
+        SX_WINDOW_WIDTH,
+        SX_WINDOW_HEIGHT,
+        SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE
+    )) {
         SX_App_SafeAbort(app);
     }
 }
 
 bool SX_App_RenderLoop(App* app) {
-    SDL_FillSurfaceRect(
-        app->mainSurface,
-        nullptr,
-        SDL_MapSurfaceRGB(app->mainSurface, 0x7f, 0x00, 0xff)
-    );
 
-    SDL_BlitSurfaceScaled(
-        app->helloSurface,
-        nullptr,
-        app->mainSurface,
-        nullptr,
-        SDL_SCALEMODE_NEAREST
-    );
-
-    SDL_UpdateWindowSurface(app->mainWindow);
     return true;
 }
 
@@ -72,6 +54,11 @@ bool SX_App_SDLPoll(App* app) {
             case SDL_EVENT_QUIT: {
                 SDL_LogVerbose(0, "SDL_EVENT_QUIT caught.\n");
                 return false;
+            }
+            case SDL_EVENT_WINDOW_RESIZED: {
+                app->windowWidth = event.window.data1;
+                app->windowHeight = event.window.data2;
+                break;
             }
         }
     }
@@ -90,16 +77,7 @@ void SX_App_Update(App* app) {
     }
 }
 
-void SX_App_Temp_PreloadTestAssets(App* app) {
-    const char* imagePath = "hello.bmp";
-    app->helloSurface = SDL_LoadBMP(imagePath);
-    if (!app->helloSurface) {
-        SDL_Log("Unable to load image %s: %s", imagePath, SDL_GetError());
-        SX_App_SafeAbort(app);
-    }
-}
-
-App SX_App_Init(void) {
+App SX_App_Init(i32 argc, c_str_arr argv) {
     App app = { };
 
     SDL_LogVerbose(0, "[SX_App] Initializing...\n");
@@ -107,14 +85,21 @@ App SX_App_Init(void) {
     bool initSuccess = SDL_Init(SDL_INIT_VIDEO);
 
     if (!initSuccess) {
-        SDL_Log("[SX_App] Initialization failed: %s \n", SDL_GetError());
+        SDL_Log("[SX_App] SDL initialization failed: %s \n", SDL_GetError());
         abort();
     }
 
     SX_App_CreateWindow(&app);
-    SX_App_Temp_PreloadTestAssets(&app);
 
-    app.vkInstance = SX_Vk_Init();
+    c_str cwd = SDL_GetCurrentDirectory();
+    
+    c_str basePath = SDL_GetBasePath();
+    SX_Log_Now("cwd='%s', exePath='%s'\n", cwd, basePath);
+    
+    if (strcmp(cwd, basePath) != 0) {
+        SX_SetCwd(basePath);
+        SX_Log_Now("Set cwd to: %s\n", basePath);
+    }
 
     app.time = SX_Time_Init();
 
